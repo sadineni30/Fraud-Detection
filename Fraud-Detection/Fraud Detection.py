@@ -3,7 +3,7 @@ dbutils.fs.mounts()
 
 # COMMAND ----------
 
-dbutils.fs.unmount('/mnt/s3-mount')
+dbutils.fs.unmount("/mnt/s3-transaction-history")
 
 # COMMAND ----------
 
@@ -11,7 +11,8 @@ dbutils.fs.mounts()
 
 # COMMAND ----------
 
-
+Acess_key = dbutils.secrets.get(scope="secret-scope", key="aws-access-key")
+Secret_key = dbutils.secrets.get(scope="secret-scope", key="aws-secret-key")
 Bucket_name = "fraud-detection-in-financial-transcations"
 Mount_point = "s3-transaction-history"
 encoded_secret_key = Secret_key.replace("/", "%2F")
@@ -86,4 +87,7 @@ enriched_data.write.format("delta").mode("overwrite").save("dbfs:/FileStore/File
 
 # COMMAND ----------
 
-
+A_key = dbutils.secrets.get(scope = "secret-scope", key = "aws-access-key")
+print(A_key)
+S_key = dbutils.secrets.get(scope = "secret-scope", key = "aws-secret-key")
+print(S_key)
