@@ -1,4 +1,10 @@
 # Databricks notebook source
+# MAGIC %md
+# MAGIC **Fraud Detection in Financial Transactions with Time Windowing**
+# MAGIC
+
+# COMMAND ----------
+
 dbutils.fs.mounts()
 
 # COMMAND ----------
@@ -32,7 +38,15 @@ display(df)
 
 # COMMAND ----------
 
-# data cleaning
+df.printSchema()
+
+# COMMAND ----------
+
+# MAGIC %md
+# MAGIC Data cleaning
+
+# COMMAND ----------
+
 cleaned_df = df.filter(df.TransactionAmount > 0).dropna()
 display(cleaned_df)
 
@@ -87,7 +101,19 @@ enriched_data.write.format("delta").mode("overwrite").save("dbfs:/FileStore/File
 
 # COMMAND ----------
 
+# write the data to s3 bucket again
+enriched_data.write \
+    .format("delta") \
+    .mode("overwrite") \
+    .save("dbfs:/mnt/s3-transaction-history/fraud_detection_transformed")
+
+# COMMAND ----------
+
 A_key = dbutils.secrets.get(scope = "secret-scope", key = "aws-access-key")
 print(A_key)
 S_key = dbutils.secrets.get(scope = "secret-scope", key = "aws-secret-key")
 print(S_key)
+
+# COMMAND ----------
+
+
